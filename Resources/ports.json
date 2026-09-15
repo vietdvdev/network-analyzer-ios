@@ -1,0 +1,20 @@
+[
+  { "port": 20, "service": "FTP-Data", "description": "File Transfer Protocol (Data)" },
+  { "port": 21, "service": "FTP", "description": "File Transfer Protocol (Control)" },
+  { "port": 22, "service": "SSH", "description": "Secure Shell" },
+  { "port": 23, "service": "Telnet", "description": "Unencrypted text communications" },
+  { "port": 25, "service": "SMTP", "description": "Simple Mail Transfer Protocol" },
+  { "port": 53, "service": "DNS", "description": "Domain Name System" },
+  { "port": 67, "service": "DHCP", "description": "Bootstrap Protocol / DHCP Server" },
+  { "port": 80, "service": "HTTP", "description": "Hypertext Transfer Protocol" },
+  { "port": 110, "service": "POP3", "description": "Post Office Protocol v3" },
+  { "port": 123, "service": "NTP", "description": "Network Time Protocol" },
+  { "port": 137, "service": "NetBIOS-NS", "description": "NetBIOS Name Service" },
+  { "port": 143, "service": "IMAP", "description": "Internet Message Access Protocol" },
+  { "port": 443, "service": "HTTPS", "description": "HTTP over TLS/SSL" },
+  { "port": 445, "service": "SMB", "description": "Microsoft-DS Active Directory / SMB" },
+  { "port": 3306, "service": "MySQL", "description": "MySQL Database Server" },
+  { "port": 3389, "service": "RDP", "description": "Remote Desktop Protocol" },
+  { "port": 5432, "service": "PostgreSQL", "description": "PostgreSQL Database" },
+  { "port": 8080, "service": "HTTP-Proxy", "description": "HTTP Alternate / Proxy" }
+]

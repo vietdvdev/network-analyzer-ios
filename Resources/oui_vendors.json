@@ -1,0 +1,14 @@
+[
+  { "prefix": "00:03:93", "vendor": "Apple, Inc." },
+  { "prefix": "00:17:F2", "vendor": "Apple, Inc." },
+  { "prefix": "3C:22:FB", "vendor": "Apple, Inc." },
+  { "prefix": "F0:18:98", "vendor": "Apple, Inc." },
+  { "prefix": "B8:27:EB", "vendor": "Raspberry Pi Foundation" },
+  { "prefix": "DC:A6:32", "vendor": "Raspberry Pi Trading Ltd" },
+  { "prefix": "00:1A:2B", "vendor": "Cisco Systems, Inc" },
+  { "prefix": "00:0C:29", "vendor": "VMware, Inc." },
+  { "prefix": "F4:F5:E8", "vendor": "Google, Inc." },
+  { "prefix": "D8:0D:17", "vendor": "TP-Link Corporation Limited" },
+  { "prefix": "50:D4:F7", "vendor": "TP-Link Corporation Limited" },
+  { "prefix": "AC:84:C6", "vendor": "Xiaomi Communications Co Ltd" }
+]
