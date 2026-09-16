@@ -73,7 +73,7 @@ public final class WebToolsEngine: @unchecked Sendable {
         
         do {
             let decoder = JSONDecoder()
-            let dohResponse = try decoder.decode(DoHResponse.self, data: data)
+            let dohResponse = try decoder.decode(DoHResponse.self, from: data)
             
             guard let answers = dohResponse.Answer, !answers.isEmpty else {
                 return []
@@ -136,7 +136,7 @@ public final class WebToolsEngine: @unchecked Sendable {
         
         do {
             let decoder = JSONDecoder()
-            let rdapData = try decoder.decode(RDAPResponse.self, data: data)
+            let rdapData = try decoder.decode(RDAPResponse.self, from: data)
             return formatRDAPSummary(rdap: rdapData, target: target, isIP: isIP)
         } catch {
             // Fallback: If strict structure decoding fails, attempt basic dictionary summary

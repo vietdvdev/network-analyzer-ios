@@ -41,11 +41,13 @@ struct MainTabView: View {
     var body: some View {
         Group {
             if horizontalSizeClass == .regular {
-                // iPad / Mac Catalyst structured sidebar navigation
+                // iPad structured sidebar navigation
                 NavigationSplitView {
-                    List(Tab.allCases, selection: $selectedTab) { tab in
-                        NavigationLink(value: tab) {
-                            Label(tab.rawValue, systemImage: tab.icon)
+                    List(selection: $selectedTab) {
+                        ForEach(Tab.allCases) { tab in
+                            NavigationLink(value: tab) {
+                                Label(tab.rawValue, systemImage: tab.icon)
+                            }
                         }
                     }
                     .navigationTitle("Network Analyzer")

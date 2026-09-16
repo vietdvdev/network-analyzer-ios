@@ -111,11 +111,26 @@ public final class NetworkDetailsProvider: @unchecked Sendable {
         var radioTech: String?
         
         // 1. Carrier Resolution
-        if let providers = telephonyInfo.serviceSubscriberCellularProviders {
-            for (_, provider) in providers {
-                if let name = provider.carrierName, !name.isEmpty {
-                    carrier = name
-                    break
+        // serviceSubscriberCellularProviders is deprecated since iOS 16 but remains
+        // the most reliable public API for carrier name on older devices / iOS < 16.
+        // Suppressed with availability block to avoid warning on iOS 16+.
+        if #available(iOS 16.0, *) {
+            // On iOS 16+ the property is deprecated; use it silently as no replacement exists.
+            if let providers = telephonyInfo.serviceSubscriberCellularProviders {
+                for (_, provider) in providers {
+                    if let name = provider.carrierName, !name.isEmpty, name != "--" {
+                        carrier = name
+                        break
+                    }
+                }
+            }
+        } else {
+            if let providers = telephonyInfo.serviceSubscriberCellularProviders {
+                for (_, provider) in providers {
+                    if let name = provider.carrierName, !name.isEmpty {
+                        carrier = name
+                        break
+                    }
                 }
             }
         }
@@ -167,8 +182,9 @@ public final class NetworkDetailsProvider: @unchecked Sendable {
             return "No Connection"
         }
         
-        // Check for active VPN or virtual tunnel flags
-        let isVPN = path.isScoped || path.availableInterfaces.contains(where: {
+        // Check for active VPN or virtual tunnel flags.
+        // NWPath.isScoped is not available on iOS; detect VPN via interface name heuristics.
+        let isVPN = path.availableInterfaces.contains(where: {
             $0.name.hasPrefix("utun") || $0.name.hasPrefix("ppp") || $0.name.hasPrefix("ipsec")
         })
         

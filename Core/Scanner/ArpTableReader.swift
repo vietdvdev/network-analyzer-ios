@@ -179,7 +179,7 @@ public final class ArpTableReader: @unchecked Sendable {
             // ── Destination (IPv4) ──────────────────────────────────────────
             if rtaBit == kRTA_DST, sa.sa_family == UInt8(AF_INET) {
                 let sinPtr = sockaddrPtr.assumingMemoryBound(to: sockaddr_in.self)
-                var addr = sinPtr.pointee.sin_addr
+                let addr = sinPtr.pointee.sin_addr
                 if let cStr = inet_ntoa(addr) {
                     ipAddress = String(cString: cStr)
                 }
