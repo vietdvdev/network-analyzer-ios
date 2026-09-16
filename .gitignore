@@ -1,0 +1,50 @@
+# ==============================
+# Xcode User Data (machine-specific, never commit)
+# ==============================
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcworkspace/xcshareddata/swiftpm/
+xcuserdata/
+
+# ==============================
+# Build Artifacts
+# ==============================
+build/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# ==============================
+# macOS / Finder
+# ==============================
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+
+# ==============================
+# Swift Package Manager
+# ==============================
+.build/
+.swiftpm/
+
+# ==============================
+# CocoaPods (not used, but just in case)
+# ==============================
+Pods/
+*.xcworkspace
+
+# ==============================
+# Fastlane
+# ==============================
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# ==============================
+# Other
+# ==============================
+*.moved-aside
+*.orig
