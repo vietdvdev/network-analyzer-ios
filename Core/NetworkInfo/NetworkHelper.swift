@@ -142,7 +142,7 @@ public final class NetworkHelper: @unchecked Sendable {
         
         for host in startHost...endHost {
             // Convert host byte order back to network byte order
-            var currentInAddr = in_addr(s_addr: host.bigEndian)
+            let currentInAddr = in_addr(s_addr: host.bigEndian)
             if let cString = inet_ntoa(currentInAddr) {
                 availableIPs.append(String(cString: cString))
             }

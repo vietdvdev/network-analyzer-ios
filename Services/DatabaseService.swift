@@ -63,7 +63,7 @@ public final class DatabaseService: @unchecked Sendable {
         
         do {
             let data = try Data(contentsOf: url, options: .mappedIfSafe)
-            let decodedPorts = try JSONDecoder().decode([PortEntry].self, data: data)
+            let decodedPorts = try JSONDecoder().decode([PortEntry].self, from: data)
             
             var tempDict: [Int: String] = [:]
             tempDict.reserveCapacity(decodedPorts.count)
@@ -84,7 +84,7 @@ public final class DatabaseService: @unchecked Sendable {
         
         do {
             let data = try Data(contentsOf: url, options: .mappedIfSafe)
-            let decodedVendors = try JSONDecoder().decode([VendorEntry].self, data: data)
+            let decodedVendors = try JSONDecoder().decode([VendorEntry].self, from: data)
             
             var tempDict: [String: String] = [:]
             tempDict.reserveCapacity(decodedVendors.count)
