@@ -233,12 +233,15 @@ public final class TracerouteEngine: @unchecked Sendable {
     private func extractIPString(from storage: sockaddr_storage) -> String? {
         var hostBuffer = [CChar](repeating: 0, count: Int(NI_MAXHOST))
         var storageCopy = storage
+        // Cache ss_len before entering the unsafe pointer scope to avoid
+        // Swift's Law of Exclusivity violation (overlapping read+write on storageCopy).
+        let ssLen = socklen_t(storageCopy.ss_len)
         
         let conversionStatus = withUnsafePointer(to: &storageCopy) { ptr in
             ptr.withMemoryRebound(to: sockaddr.self, capacity: 1) { saPtr in
                 getnameinfo(
                     saPtr,
-                    socklen_t(storageCopy.ss_len),
+                    ssLen,           // ← use the cached value, not storageCopy.ss_len
                     &hostBuffer,
                     socklen_t(hostBuffer.count),
                     nil,
