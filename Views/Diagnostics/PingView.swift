@@ -108,14 +108,15 @@ struct PingView: View {
                             .font(.caption)
                     }
                     
-                    Text(isPinging ? "Đang gửi gói ICMP..." : "Bắt đầu Ping")
+                    let buttonTitle: String = isPinging ? "Đang gửi gói ICMP..." : "Bắt đầu Ping"
+                    Text(buttonTitle)
                         .font(.headline)
                         .fontWeight(.semibold)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 12)
                 .foregroundStyle(.white)
-                .background(isPinging || hostInput.trimmingCharacters(in: .whitespaces).isEmpty ? accentColor.opacity(0.6) : accentColor)
+                .background(actionButtonColor)
                 .clipShape(RoundedRectangle(cornerRadius: minimalCornerRadius, style: .continuous))
             }
             .disabled(isPinging || hostInput.trimmingCharacters(in: .whitespaces).isEmpty)
@@ -127,6 +128,11 @@ struct PingView: View {
             RoundedRectangle(cornerRadius: minimalCornerRadius, style: .continuous)
                 .stroke(Color(uiColor: .separator).opacity(0.3), lineWidth: 0.8)
         )
+    }
+
+    private var actionButtonColor: Color {
+        let isEmpty = hostInput.trimmingCharacters(in: .whitespaces).isEmpty
+        return (isPinging || isEmpty) ? accentColor.opacity(0.6) : accentColor
     }
     
     private var resultsSectionCard: some View {
@@ -141,13 +147,7 @@ struct PingView: View {
                 Spacer()
                 
                 if !pingResults.isEmpty {
-                    let successfulPings = pingResults.filter { $0.error == nil }
-                    let lossRate = Int((Double(pingResults.count - successfulPings.count) / Double(pingResults.count)) * 100)
-                    Text("Loss: \(lossRate)%")
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundStyle(lossRate > 0 ? .red : .secondary)
-                        .monospacedDigit()
+                    lossRateBadge
                 }
             }
             
@@ -167,6 +167,20 @@ struct PingView: View {
             RoundedRectangle(cornerRadius: minimalCornerRadius, style: .continuous)
                 .stroke(Color(uiColor: .separator).opacity(0.3), lineWidth: 0.8)
         )
+    }
+
+    @ViewBuilder
+    private var lossRateBadge: some View {
+        let count = pingResults.count
+        let successfulPings = pingResults.filter { $0.error == nil }.count
+        let failedCount = count - successfulPings
+        let lossRate = count > 0 ? Int((Double(failedCount) / Double(count)) * 100.0) : 0
+        
+        Text("Loss: \(lossRate)%")
+            .font(.caption)
+            .fontWeight(.medium)
+            .foregroundStyle(lossRate > 0 ? Color.red : Color.secondary)
+            .monospacedDigit()
     }
     
     private func pingResultRow(_ result: PingResult) -> some View {
@@ -189,26 +203,34 @@ struct PingView: View {
                     .fill(Color.red)
                     .frame(width: 8, height: 8)
             } else {
-                Text("\(String(format: "%.1f", result.rtt)) ms")
+                let rttText = String(format: "%.1f ms", result.rtt)
+                let rttColor: Color = result.rtt < 80 ? .green : .orange
+                Text(rttText)
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .monospacedDigit()
-                    .foregroundStyle(result.rtt < 80 ? Color.green : Color.orange)
+                    .foregroundStyle(rttColor)
                 
                 Spacer()
                 
                 Circle()
-                    .fill(result.rtt < 80 ? Color.green : Color.orange)
+                    .fill(rttColor)
                     .frame(width: 8, height: 8)
             }
         }
         .padding(.vertical, 4)
     }
     
+    @ViewBuilder
     private var statisticsCard: some View {
         let stats = PingStatistics(results: pingResults)
+        let minText = String(format: "%.1f ms", stats.minRTT)
+        let avgText = String(format: "%.1f ms", stats.avgRTT)
+        let maxText = String(format: "%.1f ms", stats.maxRTT)
+        let jitterText = String(format: "%.2f ms", stats.jitter)
+        let lossText = String(format: "%.0f%% (%d/%d)", stats.packetLossPercent, stats.packetsReceived, stats.packetsSent)
         
-        return VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 8) {
                 Image(systemName: "chart.bar.fill")
                     .foregroundStyle(accentColor)
@@ -225,21 +247,21 @@ struct PingView: View {
                 GridItem(.flexible()),
                 GridItem(.flexible())
             ], spacing: 12) {
-                statCell(title: "Min", value: String(format: "%.1f ms", stats.minRTT), color: .green)
-                statCell(title: "Avg", value: String(format: "%.1f ms", stats.avgRTT), color: accentColor)
-                statCell(title: "Max", value: String(format: "%.1f ms", stats.maxRTT), color: .orange)
+                statCell(title: "Min", value: minText, color: .green)
+                statCell(title: "Avg", value: avgText, color: accentColor)
+                statCell(title: "Max", value: maxText, color: .orange)
             }
             
             Divider()
             
             HStack {
-                InfoRow(title: "Jitter", value: String(format: "%.2f ms", stats.jitter), isMonospaced: true)
+                InfoRow(title: "Jitter", value: jitterText, isMonospaced: true)
             }
             Divider()
             HStack {
                 InfoRow(
                     title: "Packet Loss",
-                    value: String(format: "%.0f%% (%d/%d)", stats.packetLossPercent, stats.packetsReceived, stats.packetsSent),
+                    value: lossText,
                     isMonospaced: true
                 )
             }
